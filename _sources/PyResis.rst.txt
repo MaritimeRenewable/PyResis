@@ -1,0 +1,22 @@
+PyResis package
+===============
+
+Submodules
+----------
+
+PyResis\.propulsion\_power module
+---------------------------------
+
+.. automodule:: PyResis.propulsion_power
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: PyResis
+    :members:
+    :undoc-members:
+    :show-inheritance:

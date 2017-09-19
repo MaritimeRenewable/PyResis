@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyResis package &#8212; PyResis 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyresis-package">
+<h1>PyResis package<a class="headerlink" href="#pyresis-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-PyResis.propulsion_power">
+<span id="pyresis-propulsion-power-module"></span><h2>PyResis.propulsion_power module<a class="headerlink" href="#module-PyResis.propulsion_power" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PyResis.propulsion_power.Ship">
+<em class="property">class </em><code class="descclassname">PyResis.propulsion_power.</code><code class="descname">Ship</code><a class="reference internal" href="_modules/PyResis/propulsion_power.html#Ship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.Ship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class of ship object, can be initialize with zero argument.</p>
+<dl class="method">
+<dt id="PyResis.propulsion_power.Ship.dimension">
+<code class="descname">dimension</code><span class="sig-paren">(</span><em>length</em>, <em>draught</em>, <em>beam</em>, <em>speed</em>, <em>slenderness_coefficient</em>, <em>prismatic_coefficient</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#Ship.dimension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.Ship.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign values for the main dimension of a ship.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>length</strong> &#8211; metres length of the vehicle</li>
+<li><strong>draught</strong> &#8211; metres draught of the vehicle</li>
+<li><strong>beam</strong> &#8211; metres beam of the vehicle</li>
+<li><strong>speed</strong> &#8211; m/s speed of the vehicle</li>
+<li><strong>slenderness_coefficient</strong> &#8211; Slenderness coefficient dimensionless <span class="math">\(L/(∇^{1/3})\)</span> where L is length of ship,
+∇ is displacement</li>
+<li><strong>prismatic_coefficient</strong> &#8211; Prismatic coefficient dimensionless <span class="math">\(∇/(L\cdot A_m)\)</span> where L is length of ship,
+∇ is displacement Am is midsection area of the ship</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyResis.propulsion_power.Ship.get_reynold_number">
+<code class="descname">get_reynold_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#Ship.get_reynold_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.Ship.get_reynold_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Reynold number of the ship</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Reynold number of the ship</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyResis.propulsion_power.Ship.maximum_deck_area">
+<code class="descname">maximum_deck_area</code><span class="sig-paren">(</span><em>water_plane_coef=0.88</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#Ship.maximum_deck_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.Ship.maximum_deck_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum deck area of the ship</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>water_plane_coef</strong> &#8211; optional water plane coefficient</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Area of the deck</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyResis.propulsion_power.Ship.prop_power">
+<code class="descname">prop_power</code><span class="sig-paren">(</span><em>propulsion_eff=0.7</em>, <em>sea_margin=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#Ship.prop_power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.Ship.prop_power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total propulsion power of the ship.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>propulsion_eff</strong> &#8211; Shaft efficiency of the ship</li>
+<li><strong>sea_margin</strong> &#8211; Sea margin take account of interaction between ship and the sea, e.g. wave</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Watts shaft propulsion power of the ship</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyResis.propulsion_power.Ship.resistance">
+<code class="descname">resistance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#Ship.resistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.Ship.resistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return resistance of the vehicle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">newton the resistance of the ship</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="PyResis.propulsion_power.frictional_resistance_coef">
+<code class="descclassname">PyResis.propulsion_power.</code><code class="descname">frictional_resistance_coef</code><span class="sig-paren">(</span><em>length</em>, <em>speed</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#frictional_resistance_coef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.frictional_resistance_coef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flat plate frictional resistance of the ship according to ITTC formula.
+ref: <a class="reference external" href="https://ittc.info/media/2021/75-02-02-02.pdf">https://ittc.info/media/2021/75-02-02-02.pdf</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> &#8211; metres length of the vehicle</li>
+<li><strong>speed</strong> &#8211; m/s speed of the vehicle</li>
+<li><strong>kwargs</strong> &#8211; optional could take in temperature to take account change of water property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Frictional resistance coefficient of the vehicle</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyResis.propulsion_power.froude_number">
+<code class="descclassname">PyResis.propulsion_power.</code><code class="descname">froude_number</code><span class="sig-paren">(</span><em>speed</em>, <em>length</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#froude_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.froude_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Froude number utility function that return Froude number for vehicle at specific length and speed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>speed</strong> &#8211; m/s speed of the vehicle</li>
+<li><strong>length</strong> &#8211; metres length of the vehicle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Froude number of the vehicle (dimensionless)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyResis.propulsion_power.residual_resistance_coef">
+<code class="descclassname">PyResis.propulsion_power.</code><code class="descname">residual_resistance_coef</code><span class="sig-paren">(</span><em>slenderness</em>, <em>prismatic_coef</em>, <em>froude_number</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#residual_resistance_coef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.residual_resistance_coef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Residual resistance coefficient estimation from slenderness function, prismatic coefficient and Froude number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>slenderness</strong> &#8211; Slenderness coefficient dimensionless <span class="math">\(L/(∇^{1/3})\)</span> where L is length of ship, ∇ is displacement</li>
+<li><strong>prismatic_coef</strong> &#8211; Prismatic coefficient dimensionless <span class="math">\(∇/(L\cdot A_m)\)</span> where L is length of ship, ∇ is displacement Am is midsection area of the ship</li>
+<li><strong>froude_number</strong> &#8211; Froude number of the ship dimensionless</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Residual resistance of the ship</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyResis.propulsion_power.reynolds_number">
+<code class="descclassname">PyResis.propulsion_power.</code><code class="descname">reynolds_number</code><span class="sig-paren">(</span><em>length</em>, <em>speed</em>, <em>temperature=25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyResis/propulsion_power.html#reynolds_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyResis.propulsion_power.reynolds_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reynold number utility function that return Reynold number for vehicle at specific length and speed.
+Optionally, it can also take account of temperature effect of sea water.</p>
+<blockquote>
+<div>Kinematic viscosity from: <a class="reference external" href="http://web.mit.edu/seawater/2017_MIT_Seawater_Property_Tables_r2.pdf">http://web.mit.edu/seawater/2017_MIT_Seawater_Property_Tables_r2.pdf</a></div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>length</strong> &#8211; metres length of the vehicle</li>
+<li><strong>speed</strong> &#8211; m/s speed of the vehicle</li>
+<li><strong>temperature</strong> &#8211; degree C</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Reynolds number of the vehicle (dimensionless)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyResis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyResis" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyResis package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-PyResis.propulsion_power">PyResis.propulsion_power module</a></li>
+<li><a class="reference internal" href="#module-PyResis">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/PyResis.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Yu Cao.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/PyResis.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyResis.propulsion_power &#8212; PyResis 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyResis.propulsion_power</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">interpolate</span>
+
+
+<div class="viewcode-block" id="frictional_resistance_coef"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.frictional_resistance_coef">[docs]</a><span class="k">def</span> <span class="nf">frictional_resistance_coef</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Flat plate frictional resistance of the ship according to ITTC formula.</span>
+<span class="sd">    ref: https://ittc.info/media/2021/75-02-02-02.pdf</span>
+
+<span class="sd">    :param length: metres length of the vehicle</span>
+<span class="sd">    :param speed: m/s speed of the vehicle</span>
+<span class="sd">    :param kwargs: optional could take in temperature to take account change of water property</span>
+<span class="sd">    :return: Frictional resistance coefficient of the vehicle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Cf</span> <span class="o">=</span> <span class="mf">0.075</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">reynolds_number</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">Cf</span></div>
+
+
+<div class="viewcode-block" id="reynolds_number"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.reynolds_number">[docs]</a><span class="k">def</span> <span class="nf">reynolds_number</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reynold number utility function that return Reynold number for vehicle at specific length and speed.</span>
+<span class="sd">    Optionally, it can also take account of temperature effect of sea water.</span>
+
+<span class="sd">        Kinematic viscosity from: http://web.mit.edu/seawater/2017_MIT_Seawater_Property_Tables_r2.pdf</span>
+
+<span class="sd">    :param length: metres length of the vehicle</span>
+<span class="sd">    :param speed: m/s speed of the vehicle</span>
+<span class="sd">    :param temperature: degree C </span>
+<span class="sd">    :return: Reynolds number of the vehicle (dimensionless)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kinematic_viscosity</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
+                                               <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">18.54</span><span class="p">,</span> <span class="mf">13.60</span><span class="p">,</span> <span class="mf">10.50</span><span class="p">,</span> <span class="mf">9.37</span><span class="p">,</span> <span class="mf">8.42</span><span class="p">,</span> <span class="mf">6.95</span><span class="p">])</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="c1"># Data from http://web.mit.edu/seawater/2017_MIT_Seawater_Property_Tables_r2.pdf</span>
+    <span class="n">Re</span> <span class="o">=</span> <span class="n">length</span> <span class="o">*</span> <span class="n">speed</span> <span class="o">/</span> <span class="n">kinematic_viscosity</span><span class="p">(</span><span class="n">temperature</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Re</span></div>
+
+
+<div class="viewcode-block" id="froude_number"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.froude_number">[docs]</a><span class="k">def</span> <span class="nf">froude_number</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Froude number utility function that return Froude number for vehicle at specific length and speed.</span>
+
+<span class="sd">    :param speed: m/s speed of the vehicle</span>
+<span class="sd">    :param length: metres length of the vehicle</span>
+<span class="sd">    :return: Froude number of the vehicle (dimensionless)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mf">9.80665</span>  <span class="c1"># conventional standard value m/s^2</span>
+    <span class="n">Fr</span> <span class="o">=</span> <span class="n">speed</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Fr</span></div>
+
+<span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;cr.txt&#39;</span><span class="p">)</span>
+<span class="n">cr_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+<span class="n">cr_points</span> <span class="o">=</span> <span class="n">cr_list</span><span class="o">.</span><span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">cr_values</span> <span class="o">=</span> <span class="n">cr_list</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="mi">1000</span>
+<span class="n">cr</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">LinearNDInterpolator</span><span class="p">(</span><span class="n">cr_points</span><span class="p">,</span> <span class="n">cr_values</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="residual_resistance_coef"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.residual_resistance_coef">[docs]</a><span class="k">def</span> <span class="nf">residual_resistance_coef</span><span class="p">(</span><span class="n">slenderness</span><span class="p">,</span> <span class="n">prismatic_coef</span><span class="p">,</span> <span class="n">froude_number</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Residual resistance coefficient estimation from slenderness function, prismatic coefficient and Froude number.</span>
+
+<span class="sd">    :param slenderness: Slenderness coefficient dimensionless :math:`L/(∇^{1/3})` where L is length of ship, ∇ is displacement</span>
+<span class="sd">    :param prismatic_coef: Prismatic coefficient dimensionless :math:`∇/(L\cdot A_m)` where L is length of ship, ∇ is displacement Am is midsection area of the ship</span>
+<span class="sd">    :param froude_number: Froude number of the ship dimensionless </span>
+<span class="sd">    :return: Residual resistance of the ship</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Cr</span> <span class="o">=</span> <span class="n">cr</span><span class="p">(</span><span class="n">slenderness</span><span class="p">,</span> <span class="n">prismatic_coef</span><span class="p">,</span> <span class="n">froude_number</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Cr</span></div>
+
+
+<div class="viewcode-block" id="Ship"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.Ship">[docs]</a><span class="k">class</span> <span class="nc">Ship</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class of ship object, can be initialize with zero argument.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_resistance_coef</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Ship.dimension"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.Ship.dimension">[docs]</a>    <span class="k">def</span> <span class="nf">dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">draught</span><span class="p">,</span> <span class="n">beam</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span>
+                 <span class="n">slenderness_coefficient</span><span class="p">,</span> <span class="n">prismatic_coefficient</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign values for the main dimension of a ship.</span>
+
+<span class="sd">        :param length: metres length of the vehicle</span>
+<span class="sd">        :param draught: metres draught of the vehicle</span>
+<span class="sd">        :param beam: metres beam of the vehicle</span>
+<span class="sd">        :param speed: m/s speed of the vehicle</span>
+<span class="sd">        :param slenderness_coefficient: Slenderness coefficient dimensionless :math:`L/(∇^{1/3})` where L is length of ship,</span>
+<span class="sd">            ∇ is displacement</span>
+<span class="sd">        :param prismatic_coefficient: Prismatic coefficient dimensionless :math:`∇/(L\cdot A_m)` where L is length of ship,</span>
+<span class="sd">            ∇ is displacement Am is midsection area of the ship</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draught</span> <span class="o">=</span> <span class="n">draught</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beam</span> <span class="o">=</span> <span class="n">beam</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slenderness_coefficient</span> <span class="o">=</span> <span class="n">slenderness_coefficient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prismatic_coefficient</span> <span class="o">=</span> <span class="n">prismatic_coefficient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">displacement</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">slenderness_coefficient</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surface_area</span> <span class="o">=</span> <span class="mf">1.025</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">draught</span> <span class="o">+</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">displacement</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">draught</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ship.resistance"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.Ship.resistance">[docs]</a>    <span class="k">def</span> <span class="nf">resistance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return resistance of the vehicle.</span>
+
+<span class="sd">        :return: newton the resistance of the ship</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_resistance_coef</span> <span class="o">=</span> <span class="n">frictional_resistance_coef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">)</span> <span class="o">+</span> \
+                                <span class="n">residual_resistance_coef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slenderness_coefficient</span><span class="p">,</span>
+                                                         <span class="bp">self</span><span class="o">.</span><span class="n">prismatic_coefficient</span><span class="p">,</span>
+                                                         <span class="n">froude_number</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
+        <span class="n">RT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_resistance_coef</span> <span class="o">*</span> <span class="mi">1025</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_area</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">RT</span></div>
+
+<div class="viewcode-block" id="Ship.maximum_deck_area"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.Ship.maximum_deck_area">[docs]</a>    <span class="k">def</span> <span class="nf">maximum_deck_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">water_plane_coef</span><span class="o">=</span><span class="mf">0.88</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the maximum deck area of the ship</span>
+
+<span class="sd">        :param water_plane_coef: optional water plane coefficient</span>
+<span class="sd">        :return: Area of the deck</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">water_plane_coef</span>
+        <span class="k">return</span> <span class="n">AD</span></div>
+
+<div class="viewcode-block" id="Ship.get_reynold_number"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.Ship.get_reynold_number">[docs]</a>    <span class="k">def</span> <span class="nf">get_reynold_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return Reynold number of the ship</span>
+
+<span class="sd">        :return: Reynold number of the ship</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">reynolds_number</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ship.prop_power"><a class="viewcode-back" href="../../PyResis.html#PyResis.propulsion_power.Ship.prop_power">[docs]</a>    <span class="k">def</span> <span class="nf">prop_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propulsion_eff</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">sea_margin</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Total propulsion power of the ship.</span>
+
+<span class="sd">        :param propulsion_eff: Shaft efficiency of the ship</span>
+<span class="sd">        :param sea_margin: Sea margin take account of interaction between ship and the sea, e.g. wave</span>
+<span class="sd">        :return: Watts shaft propulsion power of the ship</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">PP</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">sea_margin</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resistance</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="o">/</span><span class="n">propulsion_eff</span>
+        <span class="k">return</span> <span class="n">PP</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Yu Cao.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

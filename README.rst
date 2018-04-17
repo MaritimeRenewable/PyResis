@@ -8,6 +8,7 @@ A Python package for ship Resistance estimation
 
 
 ============
+
 Requirement: ``Python >= 3`` and ``numpy, scipy``.
 
 Installation: ``pip install PyResis``.
@@ -29,7 +30,7 @@ Slenderness coefficient 6.99
 Prismatic coefficient   0.613
 ======================= ====== =======
 
-With PyResis it is easy to get an resistance estimation by:
+With PyResis it is easy to get a resistance estimation by:
 
 .. code-block:: python
 

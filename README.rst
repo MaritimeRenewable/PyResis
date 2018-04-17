@@ -1,8 +1,8 @@
 PyResis
 =======
 A Python package for ship Resistance estimation
-.. image:: https://zenodo.org/badge/103379381.svg
-   :target: https://zenodo.org/badge/latestdoi/103379381
+[![DOI](https://zenodo.org/badge/103379381.svg)](https://zenodo.org/badge/latestdoi/103379381)
+
 ============
 Requirement: ``Python >= 3`` and ``numpy, scipy``.
 

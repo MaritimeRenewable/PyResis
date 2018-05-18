@@ -1,7 +1,14 @@
 import os
+import math
 import numpy as np
 from scipy import interpolate
 
+fn = os.path.join(os.path.dirname(__file__), 'cr.txt')
+cr_list = np.loadtxt(fn)
+cr_points = cr_list.T[:3].T
+cr_values = cr_list.T[3].T / 1000
+cr = interpolate.LinearNDInterpolator(cr_points, cr_values)
+cr_nearest = interpolate.NearestNDInterpolator(cr_points, cr_values)
 
 def frictional_resistance_coef(length, speed, **kwargs):
     """
@@ -48,11 +55,6 @@ def froude_number(speed, length):
     Fr = speed / np.sqrt(g * length)
     return Fr
 
-fn = os.path.join(os.path.dirname(__file__), 'cr.txt')
-cr_list = np.loadtxt(fn)
-cr_points = cr_list.T[:3].T
-cr_values = cr_list.T[3].T / 1000
-cr = interpolate.LinearNDInterpolator(cr_points, cr_values)
 
 
 def residual_resistance_coef(slenderness, prismatic_coef, froude_number):
@@ -65,6 +67,10 @@ def residual_resistance_coef(slenderness, prismatic_coef, froude_number):
     :return: Residual resistance of the ship
     """
     Cr = cr(slenderness, prismatic_coef, froude_number)
+    if math.isnan(Cr):
+        Cr = cr_nearest(slenderness, prismatic_coef, froude_number)
+
+    # if Froude number is out of interpolation range, nearest extrapolation is used
     return Cr
 
 
@@ -73,7 +79,7 @@ class Ship():
     Class of ship object, can be initialize with zero argument.
     """
     def __init__(self):
-        self.total_resistance_coef = 0
+        pass
 
     def dimension(self, length, draught, beam, speed,
                  slenderness_coefficient, prismatic_coefficient):
@@ -140,3 +146,8 @@ class Ship():
         """
         PP = (1 + sea_margin) * self.resistance() * self.speed/propulsion_eff
         return PP
+
+if __name__ == '__main__':
+    s1 = Ship()
+    s1.dimension(5.72, 0.248, 0.76, 0.2, 6.99, 0.613)
+    print(s1.prop_power())

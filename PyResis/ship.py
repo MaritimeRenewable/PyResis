@@ -7,7 +7,7 @@ class Ship:
     """
 
     def __init__(self, length: float, draught: float, beam: float, speed: float,
-                 slenderness_coefficient: float, prismatic_coefficient: float):
+                 slenderness_coefficient: float, prismatic_coefficient: float) -> None:
         """
         Assign values for the main dimension of a ship.
 
@@ -29,7 +29,8 @@ class Ship:
         self.displacement = (self.length / self.slenderness_coefficient) ** 3
         self.surface_area = 1.025 * (1.7 * self.length * self.draught + self.displacement / self.draught)
 
-    def resistance(self):
+    @property
+    def resistance(self) -> float:
         """
         Return resistance of the vehicle.
 
@@ -41,7 +42,7 @@ class Ship:
                                                          froude_number(self.speed, self.length))
         return 1 / 2 * total_resistance_coef * 1025 * self.surface_area * self.speed ** 2
 
-    def maximum_deck_area(self, water_plane_coef: float = 0.88):
+    def maximum_deck_area(self, water_plane_coef: float = 0.88) -> float:
         """
         Return the maximum deck area of the ship
 
@@ -50,7 +51,8 @@ class Ship:
         """
         return self.beam * self.length * water_plane_coef
 
-    def get_reynold_number(self):
+    @property
+    def reynold_number(self) -> float:
         """
         Return Reynold number of the ship
 
@@ -58,7 +60,7 @@ class Ship:
         """
         return reynolds_number(self.length, self.speed)
 
-    def prop_power(self, propulsion_eff: float = 0.7, sea_margin: float = 0.2):
+    def propulsion_power(self, propulsion_eff: float = 0.7, sea_margin: float = 0.2) -> float:
         """
         Total propulsion power of the ship.
 
@@ -66,4 +68,4 @@ class Ship:
         :param sea_margin: Sea margin take account of interaction between ship and the sea, e.g. wave
         :return: Watts shaft propulsion power of the ship
         """
-        return (1 + sea_margin) * self.resistance() * self.speed / propulsion_eff
+        return (1 + sea_margin) * self.resistance * self.speed / propulsion_eff

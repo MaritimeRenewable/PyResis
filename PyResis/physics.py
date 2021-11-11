@@ -6,7 +6,7 @@ from scipy import interpolate
 from PyResis.constants import CR, CRNEAREST
 
 
-def residual_resistance_coef(slenderness: float, prismatic_coef: float, froude_number: float):
+def residual_resistance_coef(slenderness: float, prismatic_coef: float, froude_number: float) -> float:
     """
     Residual resistance coefficient estimation from slenderness function, prismatic coefficient and Froude number.
 
@@ -16,14 +16,14 @@ def residual_resistance_coef(slenderness: float, prismatic_coef: float, froude_n
     :return: Residual resistance of the ship
     """
     crvalue = CR(slenderness, prismatic_coef, froude_number)
-    if math.isnan(Cr):
+    if math.isnan(crvalue):
         crvalue = CRNEAREST(slenderness, prismatic_coef, froude_number)
 
     # if Froude number is out of interpolation range, nearest extrapolation is used
-    return crvalue
+    return float(crvalue)
 
 
-def froude_number(speed: float, length: float):
+def froude_number(speed: float, length: float) -> float:
     """
     Froude number utility function that return Froude number for vehicle at specific length and speed.
 
@@ -32,10 +32,10 @@ def froude_number(speed: float, length: float):
     :return: Froude number of the vehicle (dimensionless)
     """
     g = 9.80665  # conventional standard value m/s^2
-    return speed / np.sqrt(g * length)
+    return float(speed / np.sqrt(g * length))
 
 
-def reynolds_number(length: float, speed: float, temperature: float = 25):
+def reynolds_number(length: float, speed: float, temperature: float = 25) -> float:
     """
     Reynold number utility function that return Reynold number for vehicle at specific length and speed.
     Optionally, it can also take account of temperature effect of sea water.
@@ -50,10 +50,10 @@ def reynolds_number(length: float, speed: float, temperature: float = 25):
     kinematic_viscosity = interpolate.interp1d([0, 10, 20, 25, 30, 40],
                                                np.array([18.54, 13.60, 10.50, 9.37, 8.42, 6.95]) / 10 ** 7)
     # Data from http://web.mit.edu/seawater/2017_MIT_Seawater_Property_Tables_r2.pdf
-    return length * speed / kinematic_viscosity(temperature)
+    return float(length * speed / kinematic_viscosity(temperature))
 
 
-def frictional_resistance_coef(length: float, speed: float, **kwargs):
+def frictional_resistance_coef(length: float, speed: float, **kwargs) -> float:
     """
     Flat plate frictional resistance of the ship according to ITTC formula.
     ref: https://ittc.info/media/2021/75-02-02-02.pdf
@@ -63,4 +63,4 @@ def frictional_resistance_coef(length: float, speed: float, **kwargs):
     :param kwargs: optional could take in temperature to take account change of water property
     :return: Frictional resistance coefficient of the vehicle
     """
-    return 0.075 / (np.log10(reynolds_number(length, speed, **kwargs)) - 2) ** 2
+    return float(0.075 / (np.log10(reynolds_number(length, speed, **kwargs)) - 2) ** 2)

@@ -35,13 +35,12 @@ With PyResis it is easy to get a resistance estimation by:
 .. code-block:: python
 
    from PyResis import propulsion_power
-   ship = propulsion_power.Ship()
-   ship.dimension(5.72, 0.248, 0.76, 2, 6.99, 0.613)
-   ship.resistance()
+   ship = propulsion_power.Ship(5.72, 0.248, 0.76, 2, 6.99, 0.613)
+   ship.resistance
 
 Propulsion power estimation:
 
 .. code-block:: python
 
-    ship.prop_power()
+    ship.propulsion_power()
 

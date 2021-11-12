@@ -3,7 +3,8 @@ import setuptools
 setuptools.setup(
     name='PyResis',
     version='1.0.2',
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=["tests", "test.*", "test*.*", "docs", "assets", "config",
+                                               "internal", "venv"]),
     url='https://github.com/MaritimeRenewable/PyResis',
     license='MIT',
     author='Yu Cao',

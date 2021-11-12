@@ -1,0 +1,7 @@
+pytest==6.2.5
+pytest-pylint==0.18.0
+pytest-pep8==1.0.6
+pytest-cov==3.0.0
+pytest-dependency==0.5.1
+mypy==0.910
+pur==5.4.2
